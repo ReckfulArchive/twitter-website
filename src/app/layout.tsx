@@ -1,8 +1,13 @@
 import "./globals.css";
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
+import Providers from "./providers";
 
-const inter = Open_Sans({ style: "normal", subsets: ["cyrillic"], display: "swap" });
+const inter = Open_Sans({
+  style: "normal",
+  subsets: ["cyrillic"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Byron @ Twitter",
@@ -22,7 +27,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }

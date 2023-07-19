@@ -1,14 +1,21 @@
-import { tweetJson } from "../app/testdata";
+"use client";
+
+import { getTweets } from "@/api/queries";
 import Tweet from "./Tweet";
+import { useQuery } from "@tanstack/react-query";
 
 // Home for all 3 tweet tabs
 
-// TODO: Pull tweet data from the server here depending on the tab
-
 const Tweets = () => {
+  const { isLoading, data } = useQuery({
+    queryKey: ["getTweets"],
+    suspense: true,
+    // TODO: make it so as you scroll it pulls more tweets
+    queryFn: () => getTweets("byron", 0, 25),
+  });
   return (
     <div className="content">
-      {tweetJson && tweetJson.map((t, i) => <Tweet key={i} data={t} />)}
+      {!isLoading && data && data.map((t, i) => <Tweet key={i} data={t} />)}
     </div>
   );
 };
