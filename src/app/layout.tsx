@@ -1,6 +1,6 @@
 import "./globals.css";
-import "../assets/css/main.css";
-import "../assets/css/tweaks.css";
+import "../styles/main.css";
+import "../styles/tweaks.css";
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import Providers from "./providers";
@@ -16,9 +16,9 @@ export const metadata: Metadata = {
   description:
     "Archive of tweets made by Byron Bernstein, a.k.a @Byron, a.k.a Reckful",
   authors: [
-    { name: "Annie Wu" },
     { name: "Ignat Beresnev" },
     { name: "Ryan Coppa" },
+    { name: "Annie Wu" },
   ],
 };
 

@@ -1,7 +1,8 @@
 import Image from "next/image";
+import ReactPlayer from "react-player/lazy";
 import { Tweet } from "@/global/interfaces";
-import retweet from "../assets/img/retweet.svg";
-import like from "../assets/img/like.svg";
+import retweet from "/public/retweet.svg";
+import like from "/public/like.svg";
 
 interface TweetProps {
   data: Tweet;
@@ -53,7 +54,9 @@ const Tweet: React.FC<TweetProps> = ({ data }) => {
                 loading="lazy"
               />
             )}
-            {m.type === "video" && <video controls src={m.url}></video>}
+            {m.type === "video" && (
+              <ReactPlayer controls url={m.url} width="100%" height="100%" />
+            )}
           </div>
         ))}
         {data.replyToHandles && (

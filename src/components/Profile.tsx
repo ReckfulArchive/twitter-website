@@ -2,11 +2,11 @@
 
 import { Dispatch, MouseEvent, SetStateAction } from "react";
 import Image from "next/image";
-import verify from "../assets/img/verify.svg";
-import location from "../assets/img/location.svg";
-import link from "../assets/img/link.svg";
-import birthday from "../assets/img/birthday.svg";
-import calendar from "../assets/img/calendar.svg";
+import verify from "/public/verify.svg";
+import location from "/public/location.svg";
+import link from "/public/link.svg";
+import birthday from "/public/birthday.svg";
+import calendar from "/public/calendar.svg";
 import { useQuery } from "@tanstack/react-query";
 import { getProfile } from "@/api/queries";
 
