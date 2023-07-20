@@ -5,7 +5,7 @@ export interface Tweet {
   profileInfo: ProfileInfo;
   dateSent: Date;
   location?: Location;
-  replyToHandles?: string;
+  replyToHandles?: string[];
   text: Text;
   media: Media[];
   quote?: Quote;

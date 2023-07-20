@@ -1,4 +1,6 @@
 import "./globals.css";
+import "../assets/css/main.css";
+import "../assets/css/tweaks.css";
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import Providers from "./providers";
@@ -26,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <Providers>{children}</Providers>
       </body>

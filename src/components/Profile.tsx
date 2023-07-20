@@ -1,5 +1,6 @@
 "use client";
 
+import { Dispatch, MouseEvent, SetStateAction } from "react";
 import Image from "next/image";
 import verify from "../assets/img/verify.svg";
 import location from "../assets/img/location.svg";
@@ -9,12 +10,25 @@ import calendar from "../assets/img/calendar.svg";
 import { useQuery } from "@tanstack/react-query";
 import { getProfile } from "@/api/queries";
 
-const Profile: React.FC = () => {
-  const { isLoading, data } = useQuery({
+const tabs = ["Tweets", "Tweets & Replies", "Media"];
+
+interface ProfileProps {
+  activeTab: string;
+  setActiveTab: Dispatch<SetStateAction<string>>;
+}
+
+const Profile: React.FC<ProfileProps> = ({ activeTab, setActiveTab }) => {
+  const { isLoading, refetch, data } = useQuery({
     queryKey: ["getProfile"],
     suspense: true,
+    staleTime: Infinity,
+    cacheTime: Infinity,
+    retry: false,
     queryFn: () => getProfile("byron"),
   });
+  const toggleTab = (e: MouseEvent, i: number) => {
+    setActiveTab(tabs[i]);
+  };
   return (
     <>
       {!isLoading && data && (
@@ -105,38 +119,30 @@ const Profile: React.FC = () => {
             </div>
             <div className="following-follower">
               <div>
-                <span className="follow-number">561</span>
+                <span className="follow-number">
+                  {data.following.formatted}
+                </span>
                 <span className="follow-text">Following</span>
               </div>
               <div>
-                <span className="follow-number">379.9K</span>
+                <span className="follow-number">
+                  {data.followers.formatted}
+                </span>
                 <span className="follow-text">Followers</span>
               </div>
             </div>
           </div>
           <div className="profile-divider"></div>
           <div className="profile-tweets-tabs">
-            <a
-              href="javascript:changeTab('tb1', 'tweets');"
-              className="tab-button active"
-              id="tb1"
-            >
-              Tweets
-            </a>
-            <a
-              href="javascript:changeTab('tb2', 'tweets-with-replies');"
-              className="tab-button"
-              id="tb2"
-            >
-              Tweets &amp; Replies
-            </a>
-            <a
-              href="javascript:changeTab('tb3', 'media-tweets');"
-              className="tab-button"
-              id="tb3"
-            >
-              Media
-            </a>
+            {tabs.map((t, i) => (
+              <button
+                key={i}
+                className={`tab-button ${activeTab === t && "active"}`}
+                onClick={(e) => toggleTab(e, i)}
+              >
+                {t}
+              </button>
+            ))}
           </div>
         </div>
       )}

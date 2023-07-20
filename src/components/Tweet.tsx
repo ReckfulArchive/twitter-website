@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Tweet } from "@/global/interfaces";
-import retweet from "../assets/img/retweet.svg"
-import like from "../assets/img/like.svg"
+import retweet from "../assets/img/retweet.svg";
+import like from "../assets/img/like.svg";
 
 interface TweetProps {
   data: Tweet;
@@ -27,6 +27,17 @@ const Tweet: React.FC<TweetProps> = ({ data }) => {
           <span className="separator">•</span>
           <span className="date-sent">{data.dateSent.dateFormatted}</span>
         </div>
+        {data.replyToHandles && (
+          <div className="replying-to">
+            {data.replyToHandles.map((h, i) => (
+              <a key={i} href={`https://twitter.com/${h}`} target="_blank">
+                @{h}
+                {i != data.replyToHandles!.length - 1 ? ", " : ""}
+              </a>
+            ))}
+          </div>
+        )}
+        {/* TODO: fix mentioned tag urls in a tweet eg. @person hey there! */}
         <div className="tweet-text">
           <p>{data.text.plain}</p>
         </div>
@@ -45,6 +56,11 @@ const Tweet: React.FC<TweetProps> = ({ data }) => {
             {m.type === "video" && <video controls src={m.url}></video>}
           </div>
         ))}
+        {data.replyToHandles && (
+          <div className="show-thread">
+            <a href={data.twitterUrl}>Show this thread</a>
+          </div>
+        )}
         <div className="tweet-react">
           <div className="reaction">
             <Image
