@@ -12,6 +12,7 @@ specifiers:
   next: 13.4.10
   react: 18.2.0
   react-dom: 18.2.0
+  react-intersection-observer: ^9.5.2
   typescript: 5.1.6
 
 dependencies:
@@ -26,6 +27,7 @@ dependencies:
   next: 13.4.10_biqbaboplfbrettd7655fr4n2y
   react: 18.2.0
   react-dom: 18.2.0_react@18.2.0
+  react-intersection-observer: 9.5.2_react@18.2.0
   typescript: 5.1.6
 
 packages:
@@ -1947,6 +1949,14 @@ packages:
       loose-envify: 1.4.0
       react: 18.2.0
       scheduler: 0.23.0
+    dev: false
+
+  /react-intersection-observer/9.5.2_react@18.2.0:
+    resolution: {integrity: sha512-EmoV66/yvksJcGa1rdW0nDNc4I1RifDWkT50gXSFnPLYQ4xUptuDD4V7k+Rj1OgVAlww628KLGcxPXFlOkkU/Q==}
+    peerDependencies:
+      react: ^15.0.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /react-is/16.13.1:

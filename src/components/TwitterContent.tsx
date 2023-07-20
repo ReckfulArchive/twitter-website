@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Profile from "./Profile";
 import Tweets from "./Tweets";
 import { useQuery } from "@tanstack/react-query";
@@ -11,62 +11,79 @@ const tabs = ["Tweets", "Tweets & Replies", "Media"];
 
 const TwitterContent = () => {
   const [activeTab, setActiveTab] = useState(tabs[0]);
+  const [page, setPage] = useState(0);
+  const [tweetDataList, setTweetDataList] = useState<Tweet[]>([]);
+  const [tweetReplyDataList, setTweetReplyDataList] = useState<Tweet[]>([]);
+  const [tweetMediaDataList, setTweetMediaData] = useState<Tweet[]>([]);
 
   const { data: tweetData, refetch: tweetRefetch } = useQuery({
     queryKey: ["getTweets"],
     suspense: true,
     staleTime: Infinity,
     cacheTime: Infinity,
-    // TODO: make it so as you scroll it pulls more tweets
-    queryFn: () => getTweets("byron", "post", false, 0, 25),
+    queryFn: () => getTweets("byron", ["post"], false, page, 10),
   });
   const { data: tweetReplyData, refetch: tweetReplyRefetch } = useQuery({
     queryKey: ["getReplyTweets"],
     suspense: true,
     staleTime: Infinity,
     cacheTime: Infinity,
-    // TODO: make it so as you scroll it pulls more tweets
-    queryFn: () => getTweets("byron", "reply", false, 0, 25),
+    queryFn: () => getTweets("byron", ["reply, post"], false, page, 10),
   });
   const { data: tweetMediaData, refetch: tweetMediaRefetch } = useQuery({
     queryKey: ["getMediaTweets"],
     suspense: true,
     staleTime: Infinity,
     cacheTime: Infinity,
-    // TODO: make it so as you scroll it pulls more tweets
-    queryFn: () => getTweets("byron", "post", true, 0, 25),
+    queryFn: () => getTweets("byron", ["post"], true, page, 10),
   });
 
-  // TODO: Hacky way for now just to get the loading working to test / fix refetch issues
-
   const returnData = () => {
-    const test = new Date("2020-07-02T12:25:55");
-    const test2 = new Date("2020-05-20T14:50:01");
-    console.log(test);
-    console.log(test2);
-    console.log(test > test2);
-    if (activeTab === tabs[0]) return tweetData;
-    else if (activeTab === tabs[1])
-      return [...(tweetReplyData as Tweet[]), ...(tweetData as Tweet[])].sort(
-        (t1, t2) =>
-          new Date(t1.dateSent.iso) > new Date(t2.dateSent.iso)
-            ? -1
-            : new Date(t1.dateSent.iso) < new Date(t2.dateSent.iso)
-            ? 1
-            : 0
-      );
-    else if (activeTab === tabs[2]) return tweetMediaData;
+    if (activeTab === tabs[0]) return tweetDataList;
+    else if (activeTab === tabs[1]) return tweetReplyDataList;
+    else if (activeTab === tabs[2]) return tweetMediaDataList;
   };
-  const returnRefetch = () => {
-    if (activeTab === tabs[0]) return tweetRefetch;
-    else if (activeTab === tabs[1]) return tweetReplyRefetch;
-    else if (activeTab === tabs[2]) return tweetMediaRefetch;
+
+  const combineAndSortByDate = (list1: Tweet[], list2: Tweet[]) => {
+    return [...list1, ...list2].sort((t1, t2) =>
+      new Date(t1.dateSent.iso) > new Date(t2.dateSent.iso)
+        ? -1
+        : new Date(t1.dateSent.iso) < new Date(t2.dateSent.iso)
+        ? 1
+        : 0
+    );
   };
+
+  useEffect(() => {
+    if (page !== 0) {
+      if (activeTab === tabs[0]) {
+        tweetRefetch();
+      } else if (activeTab === tabs[1]) {
+        tweetReplyRefetch();
+      } else if (activeTab === tabs[2]) {
+        tweetMediaRefetch();
+      }
+    }
+  }, [page]);
+
+  useEffect(() => {
+    setTweetDataList((l) => [...l, ...(tweetData as Tweet[])]);
+  }, [tweetData]);
+
+  useEffect(() => {
+    setTweetReplyDataList((l) =>
+      combineAndSortByDate(l, tweetReplyData as Tweet[])
+    );
+  }, [tweetReplyData]);
+
+  useEffect(() => {
+    setTweetMediaData((l) => [...l, ...(tweetMediaData as Tweet[])]);
+  }, [tweetMediaData]);
 
   return (
     <>
       <Profile activeTab={activeTab} setActiveTab={setActiveTab} />
-      <Tweets data={returnData()} refetch={returnRefetch()} />
+      <Tweets data={returnData()} setPage={setPage} />
     </>
   );
 };
