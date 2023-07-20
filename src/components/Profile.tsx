@@ -21,8 +21,8 @@ const Profile: React.FC<ProfileProps> = ({ activeTab, setActiveTab }) => {
   const { isLoading, refetch, data } = useQuery({
     queryKey: ["getProfile"],
     suspense: true,
-    staleTime: Infinity,
-    cacheTime: Infinity,
+    staleTime: 30 * (60 * 1000),
+    cacheTime: 35 * (60 * 1000),
     retry: false,
     queryFn: () => getProfile("byron"),
   });

@@ -15,7 +15,7 @@ const Tweets: React.FC<TweetsProps> = ({ data, setPage }) => {
   useEffect(() => {
     inView && setPage((p) => p + 1);
   }, [inView]);
-  
+
   return (
     <div className="content">
       {data && data.map((t, i) => <Tweet key={i} data={t} />)}

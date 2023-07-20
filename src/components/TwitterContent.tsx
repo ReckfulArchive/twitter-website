@@ -19,22 +19,22 @@ const TwitterContent = () => {
   const { data: tweetData, refetch: tweetRefetch } = useQuery({
     queryKey: ["getTweets"],
     suspense: true,
-    staleTime: Infinity,
-    cacheTime: Infinity,
+    staleTime: 30 * (60 * 1000),
+    cacheTime: 35 * (60 * 1000),
     queryFn: () => getTweets("byron", ["post"], false, page, 10),
   });
   const { data: tweetReplyData, refetch: tweetReplyRefetch } = useQuery({
     queryKey: ["getReplyTweets"],
     suspense: true,
-    staleTime: Infinity,
-    cacheTime: Infinity,
+    staleTime: 30 * (60 * 1000),
+    cacheTime: 35 * (60 * 1000),
     queryFn: () => getTweets("byron", ["reply, post"], false, page, 10),
   });
   const { data: tweetMediaData, refetch: tweetMediaRefetch } = useQuery({
     queryKey: ["getMediaTweets"],
     suspense: true,
-    staleTime: Infinity,
-    cacheTime: Infinity,
+    staleTime: 30 * (60 * 1000),
+    cacheTime: 35 * (60 * 1000),
     queryFn: () => getTweets("byron", ["post"], true, page, 10),
   });
 
