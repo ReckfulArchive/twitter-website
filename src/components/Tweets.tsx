@@ -14,6 +14,7 @@ const Tweets: React.FC<TweetsProps> = ({ data, setPage }) => {
 
   useEffect(() => {
     inView && setPage((p) => p + 1);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
 
   return (

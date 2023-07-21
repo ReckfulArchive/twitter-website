@@ -6,9 +6,9 @@ import { Open_Sans } from "next/font/google";
 import Providers from "./providers";
 
 const inter = Open_Sans({
-  style: "normal",
-  subsets: ["cyrillic"],
+  subsets: ["greek"],
   display: "swap",
+  weight: "400"
 });
 
 export const metadata: Metadata = {

@@ -1,3 +1,5 @@
+import { TweetTab } from "./enums";
+
 export interface Tweet {
   type: string;
   id: string;
@@ -24,6 +26,11 @@ export interface Profile {
   followers: ReactionFormat;
   profilePicUrl: string;
   bannerUrl: string;
+}
+
+export interface TweetTabObj {
+  type: TweetTab;
+  text: string;
 }
 
 interface ProfileInfo {

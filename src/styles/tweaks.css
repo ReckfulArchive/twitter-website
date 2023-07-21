@@ -71,3 +71,7 @@
 .tweeter-info > .location span {
   color: #808080;
 }
+
+.username {
+  margin-top: 10px;
+}

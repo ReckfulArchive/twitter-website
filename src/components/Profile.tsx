@@ -9,16 +9,16 @@ import birthday from "/public/birthday.svg";
 import calendar from "/public/calendar.svg";
 import { useQuery } from "@tanstack/react-query";
 import { getProfile } from "@/api/queries";
-
-const tabs = ["Tweets", "Tweets & Replies", "Media"];
+import { tabs } from "@/global/data";
+import { TweetTabObj } from "@/global/interfaces";
 
 interface ProfileProps {
-  activeTab: string;
-  setActiveTab: Dispatch<SetStateAction<string>>;
+  activeTab: TweetTabObj;
+  setActiveTab: Dispatch<SetStateAction<TweetTabObj>>;
 }
 
 const Profile: React.FC<ProfileProps> = ({ activeTab, setActiveTab }) => {
-  const { isLoading, refetch, data } = useQuery({
+  const { isLoading, data } = useQuery({
     queryKey: ["getProfile"],
     suspense: true,
     staleTime: 30 * (60 * 1000),
@@ -26,7 +26,7 @@ const Profile: React.FC<ProfileProps> = ({ activeTab, setActiveTab }) => {
     retry: false,
     queryFn: () => getProfile("byron"),
   });
-  const toggleTab = (e: MouseEvent, i: number) => {
+  const toggleTab = (i: number) => {
     setActiveTab(tabs[i]);
   };
   return (
@@ -138,9 +138,9 @@ const Profile: React.FC<ProfileProps> = ({ activeTab, setActiveTab }) => {
               <button
                 key={i}
                 className={`tab-button ${activeTab === t && "active"}`}
-                onClick={(e) => toggleTab(e, i)}
+                onClick={(e) => toggleTab(i)}
               >
-                {t}
+                {t.text}
               </button>
             ))}
           </div>
