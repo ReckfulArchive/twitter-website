@@ -40,7 +40,17 @@ const Tweet: React.FC<TweetProps> = ({ data }) => {
         )}
         {/* TODO: fix mentioned tag urls in a tweet eg. @person hey there! */}
         <div className="tweet-text">
-          <p>{data.text.plain}</p>
+          <p>
+            {data.text.tokenized.map((t, i) =>
+              t.type === "link" ? (
+                <a key={i} href={t.url} target="_blank">
+                  {t.text}
+                </a>
+              ) : (
+                t.text
+              )
+            )}
+          </p>
         </div>
         {data.media.map((m, i) => (
           <div key={i} className="tweet-pic">
