@@ -12,7 +12,7 @@ interface HomeContentProps {
 
 const HomeContent: React.FC<HomeContentProps> = ({ isPageLoaded }) => {
   const { isLoading, data } = useQuery({
-    queryKey: ["getProfile"],
+    queryKey: ["getAllProfiles"],
     suspense: true,
     staleTime: 30 * (60 * 1000),
     cacheTime: 35 * (60 * 1000),
