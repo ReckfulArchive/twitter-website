@@ -10,7 +10,6 @@ import { tabs } from "@/global/data";
 import { TweetTab } from "@/global/enums";
 import Image from "next/image";
 import home from "/public/reply.svg";
-import { Oval } from "react-loader-spinner";
 
 interface TwitterContentProps {
   isPageLoaded: boolean;
@@ -29,7 +28,7 @@ const TwitterContent: React.FC<TwitterContentProps> = ({
   const [tweetReplyDataList, setTweetReplyDataList] = useState<Tweet[]>([]);
   const [tweetMediaDataList, setTweetMediaData] = useState<Tweet[]>([]);
 
-  const { isLoading: isProfileLoading, data: profileData } = useQuery({
+  const { data: profileData, isLoading: isProfileLoading } = useQuery({
     queryKey: ["getProfile"],
     suspense: true,
     staleTime: 30 * (60 * 1000),
@@ -134,24 +133,10 @@ const TwitterContent: React.FC<TwitterContentProps> = ({
 
   return (
     <>
-      {isProfileLoading ||
-      isTweetLoading ||
-      isReplyTweetLoading ||
-      isMediaTweetLoading ? (
-        <div className="content">
-          <Oval
-            ariaLabel="loading-indicator"
-            height={100}
-            width={100}
-            strokeWidth={5}
-            strokeWidthSecondary={1}
-            color="blue"
-            secondaryColor="white"
-            wrapperClass="loader"
-          />
-        </div>
-      ) : (
-        <>
+      {!isProfileLoading &&
+        !isTweetLoading &&
+        !isReplyTweetLoading &&
+        !isMediaTweetLoading && (
           <a className="homeButton" href="/">
             <Image
               width="40"
@@ -162,14 +147,13 @@ const TwitterContent: React.FC<TwitterContentProps> = ({
             />
             <h5>Home</h5>
           </a>
-          <Profile
-            data={profileData as ProfileObj}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-          />
-          <Tweets data={returnData()} setPage={returnPageType()} />
-        </>
-      )}
+        )}
+      <Profile
+        data={profileData as ProfileObj}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+      />
+      <Tweets data={returnData()} setPage={returnPageType()} />
     </>
   );
 };

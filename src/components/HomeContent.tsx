@@ -1,6 +1,6 @@
 "use client";
 
-import { getAllProfiles, getProfile } from "@/api/queries";
+import { getAllProfiles } from "@/api/queries";
 import { useQuery } from "@tanstack/react-query";
 import "../styles/home.css";
 import Image from "next/image";
@@ -11,9 +11,8 @@ interface HomeContentProps {
 }
 
 const HomeContent: React.FC<HomeContentProps> = ({ isPageLoaded }) => {
-  const { isLoading, data } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["getAllProfiles"],
-    suspense: true,
     staleTime: 30 * (60 * 1000),
     cacheTime: 35 * (60 * 1000),
     enabled: isPageLoaded,
@@ -27,10 +26,10 @@ const HomeContent: React.FC<HomeContentProps> = ({ isPageLoaded }) => {
           ariaLabel="loading-indicator"
           height={100}
           width={100}
-          strokeWidth={5}
-          strokeWidthSecondary={1}
-          color="blue"
-          secondaryColor="white"
+          strokeWidth={3}
+          strokeWidthSecondary={2}
+          color="white"
+          secondaryColor="gray"
         />
       ) : (
         <>

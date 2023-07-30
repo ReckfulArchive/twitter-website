@@ -48,8 +48,9 @@
 }
 
 .profileName {
-  font-size: medium;
+  font-size:larger;
   font-weight: 200;
+  margin-top: 8px;
   @media screen and (max-width: 768px) {
     font-size: small;
   }
