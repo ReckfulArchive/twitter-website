@@ -60,7 +60,11 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
         />
         <button onClick={() => search()}>Search</button>
       </div>
-      <Tweets key="search" data={searchTweetList} setPage={setTweetPage} />
+      {data?.length ? (
+        <Tweets key="search" data={searchTweetList} setPage={setTweetPage} />
+      ) : (
+        <p className="errorLabel">No Results Returned</p>
+      )}
     </div>
   );
 };
