@@ -38,3 +38,21 @@ export const getTweets = async (
     }
   ).then((res) => res.json())) as Tweet[];
 };
+
+export const getSearchedTweets = async (
+  profile: string,
+  searchTerm: string,
+  page: number,
+  size: number
+) => {
+  return (await fetch(
+    `https://twitter-api.reckful-archive.org/tweets/${profile}?contains_text=${searchTerm}&page=${page}&size=${size}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  ).then((res) => res.json())) as Tweet[];
+};
+

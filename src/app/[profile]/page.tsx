@@ -38,7 +38,7 @@ export default function Profile({ params }: { params: { profile: string } }) {
             />
           </Suspense>
           <footer className="nav-bar-bottom">
-            <Link href={`/${params.profile}`}>
+            <Link href={`/search/${params.profile}`}>
               <Image fill alt="Search" src={discordSearch} />
             </Link>
           </footer>

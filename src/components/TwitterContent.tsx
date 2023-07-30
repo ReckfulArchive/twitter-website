@@ -153,7 +153,7 @@ const TwitterContent: React.FC<TwitterContentProps> = ({
         activeTab={activeTab}
         setActiveTab={setActiveTab}
       />
-      <Tweets data={returnData()} setPage={returnPageType()} />
+      <Tweets key="content" data={returnData()} setPage={returnPageType()} />
     </>
   );
 };

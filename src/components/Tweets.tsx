@@ -14,12 +14,14 @@ const Tweets: React.FC<TweetsProps> = ({ data, setPage }) => {
 
   useEffect(() => {
     inView && setPage((p) => p + 1);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [inView]);
 
   return (
     <div className="content">
-      {data.map((t, i) => <Tweet key={i} data={t} />)}
+      {data.map((t, i) => (
+        <Tweet key={i} data={t} />
+      ))}
       <div ref={end} />
     </div>
   );

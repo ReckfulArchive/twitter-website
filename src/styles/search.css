@@ -1,0 +1,22 @@
+.searchForm {
+  width: 100%;
+  margin: 1rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.searchForm > input {
+  background-color: transparent;
+  padding: 8px 1rem;
+  font-size: larger;
+  border-radius: 10px;
+  border: 1px solid gray;
+}
+
+.searchForm > button {
+  background-color: transparent;
+  margin-left: 1rem;
+  padding: 8px 12px;
+  border-radius: 5px;
+}
