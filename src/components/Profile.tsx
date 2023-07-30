@@ -15,15 +15,16 @@ import { TweetTabObj } from "@/global/interfaces";
 interface ProfileProps {
   activeTab: TweetTabObj;
   setActiveTab: Dispatch<SetStateAction<TweetTabObj>>;
+  isPageLoaded: boolean;
 }
 
-const Profile: React.FC<ProfileProps> = ({ activeTab, setActiveTab }) => {
+const Profile: React.FC<ProfileProps> = ({ activeTab, setActiveTab, isPageLoaded }) => {
   const { isLoading, data } = useQuery({
     queryKey: ["getProfile"],
     suspense: true,
     staleTime: 30 * (60 * 1000),
     cacheTime: 35 * (60 * 1000),
-    retry: false,
+    enabled: isPageLoaded,
     queryFn: () => getProfile("byron"),
   });
   const toggleTab = (i: number) => {
@@ -67,8 +68,15 @@ const Profile: React.FC<ProfileProps> = ({ activeTab, setActiveTab }) => {
             <div className="hashtagNumber">@{data.handle}</div>
             <div className="bio">
               <span>
-                was the highest rated player in @Warcraft, now the creator of
-                @PlayEverland. inquiries: reckful@getader.com #blm
+                {data.description.tokenized.map((t, i) =>
+                  t.type === "link" ? (
+                    <a key={i} href={t.url} target="_blank">
+                      {t.text}{" "}
+                    </a>
+                  ) : (
+                    t.text
+                  )
+                )}
               </span>
             </div>
             <div className="location-link-bday-joined">
@@ -114,7 +122,7 @@ const Profile: React.FC<ProfileProps> = ({ activeTab, setActiveTab }) => {
                   alt="Date joined"
                   src={calendar}
                 />
-                <span>Joined February 2012</span>
+                <span>Joined {data.joinDate.monthOfYearFormatted}</span>
               </div>
             </div>
             <div className="following-follower">
@@ -138,7 +146,7 @@ const Profile: React.FC<ProfileProps> = ({ activeTab, setActiveTab }) => {
               <button
                 key={i}
                 className={`tab-button ${activeTab === t && "active"}`}
-                onClick={(e) => toggleTab(i)}
+                onClick={() => toggleTab(i)}
               >
                 {t.text}
               </button>

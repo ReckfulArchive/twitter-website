@@ -10,6 +10,7 @@ import { tabs } from "@/global/data";
 import { TweetTab } from "@/global/enums";
 
 const TwitterContent = () => {
+  const [isPageLoaded, setIsPageLoaded] = useState(false);
   const [activeTab, setActiveTab] = useState<TweetTabObj>(tabs[0]);
   const [tweetPage, setTweetPage] = useState<number>(0);
   const [tweetReplyPage, setTweetReplyPage] = useState<number>(0);
@@ -23,6 +24,7 @@ const TwitterContent = () => {
     suspense: true,
     staleTime: 30 * (60 * 1000),
     cacheTime: 35 * (60 * 1000),
+    enabled: isPageLoaded,
     queryFn: () => getTweets("byron", ["post"], false, tweetPage, 10),
   });
   const { data: tweetReplyData, refetch: tweetReplyRefetch } = useQuery({
@@ -30,6 +32,7 @@ const TwitterContent = () => {
     suspense: true,
     staleTime: 30 * (60 * 1000),
     cacheTime: 35 * (60 * 1000),
+    enabled: isPageLoaded,
     queryFn: () =>
       getTweets("byron", ["reply, post"], false, tweetReplyPage, 10),
   });
@@ -38,6 +41,7 @@ const TwitterContent = () => {
     suspense: true,
     staleTime: 30 * (60 * 1000),
     cacheTime: 35 * (60 * 1000),
+    enabled: isPageLoaded,
     queryFn: () => getTweets("byron", ["post"], true, tweetMediaPage, 10),
   });
 
@@ -82,26 +86,32 @@ const TwitterContent = () => {
       case TweetTab.MEDIA:
         tweetMediaRefetch();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [tweetPage, tweetReplyPage, tweetMediaPage]);
 
   useEffect(() => {
-    setTweetDataList((l) => [...l, ...(tweetData as Tweet[])]);
+    setTweetDataList((l) => [...l, ...(tweetData || [])]);
   }, [tweetData]);
 
   useEffect(() => {
-    setTweetReplyDataList((l) =>
-      combineAndSortByDate(l, tweetReplyData as Tweet[])
-    );
+    setTweetReplyDataList((l) => combineAndSortByDate(l, tweetReplyData || []));
   }, [tweetReplyData]);
 
   useEffect(() => {
-    setTweetMediaData((l) => [...l, ...(tweetMediaData as Tweet[])]);
+    setTweetMediaData((l) => [...l, ...(tweetMediaData || [])]);
   }, [tweetMediaData]);
+
+  useEffect(() => {
+    setIsPageLoaded(true);
+  }, []);
 
   return (
     <>
-      <Profile activeTab={activeTab} setActiveTab={setActiveTab} />
+      <Profile
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        isPageLoaded={isPageLoaded}
+      />
       <Tweets data={returnData()} setPage={returnPageType()} />
     </>
   );

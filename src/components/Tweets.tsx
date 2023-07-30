@@ -5,7 +5,7 @@ import { useInView } from "react-intersection-observer";
 import Tweet from "./Tweet";
 
 interface TweetsProps {
-  data: Tweet[] | undefined;
+  data: Tweet[];
   setPage: Dispatch<SetStateAction<number>>;
 }
 
@@ -19,7 +19,7 @@ const Tweets: React.FC<TweetsProps> = ({ data, setPage }) => {
 
   return (
     <div className="content">
-      {data && data.map((t, i) => <Tweet key={i} data={t} />)}
+      {data.map((t, i) => <Tweet key={i} data={t} />)}
       <div ref={end} />
     </div>
   );
