@@ -4,13 +4,23 @@ import { useEffect, useState } from "react";
 import Profile from "./Profile";
 import Tweets from "./Tweets";
 import { useQuery } from "@tanstack/react-query";
-import { getTweets } from "@/api/queries";
-import { Tweet, TweetTabObj } from "@/global/interfaces";
+import { getProfile, getTweets } from "@/api/queries";
+import { Profile as ProfileObj, Tweet, TweetTabObj } from "@/global/interfaces";
 import { tabs } from "@/global/data";
 import { TweetTab } from "@/global/enums";
+import Image from "next/image";
+import home from "/public/reply.svg";
+import { Oval } from "react-loader-spinner";
 
-const TwitterContent = () => {
-  const [isPageLoaded, setIsPageLoaded] = useState(false);
+interface TwitterContentProps {
+  isPageLoaded: boolean;
+  profile: string;
+}
+
+const TwitterContent: React.FC<TwitterContentProps> = ({
+  isPageLoaded,
+  profile,
+}) => {
   const [activeTab, setActiveTab] = useState<TweetTabObj>(tabs[0]);
   const [tweetPage, setTweetPage] = useState<number>(0);
   const [tweetReplyPage, setTweetReplyPage] = useState<number>(0);
@@ -19,30 +29,51 @@ const TwitterContent = () => {
   const [tweetReplyDataList, setTweetReplyDataList] = useState<Tweet[]>([]);
   const [tweetMediaDataList, setTweetMediaData] = useState<Tweet[]>([]);
 
-  const { data: tweetData, refetch: tweetRefetch } = useQuery({
+  const { isLoading: isProfileLoading, data: profileData } = useQuery({
+    queryKey: ["getProfile"],
+    suspense: true,
+    staleTime: 30 * (60 * 1000),
+    cacheTime: 35 * (60 * 1000),
+    enabled: isPageLoaded,
+    queryFn: () => getProfile(profile),
+  });
+
+  const {
+    data: tweetData,
+    refetch: tweetRefetch,
+    isLoading: isTweetLoading,
+  } = useQuery({
     queryKey: ["getTweets"],
     suspense: true,
     staleTime: 30 * (60 * 1000),
     cacheTime: 35 * (60 * 1000),
     enabled: isPageLoaded,
-    queryFn: () => getTweets("byron", ["post"], false, tweetPage, 10),
+    queryFn: () => getTweets(profile, ["post"], false, tweetPage, 10),
   });
-  const { data: tweetReplyData, refetch: tweetReplyRefetch } = useQuery({
+  const {
+    data: tweetReplyData,
+    refetch: tweetReplyRefetch,
+    isLoading: isReplyTweetLoading,
+  } = useQuery({
     queryKey: ["getReplyTweets"],
     suspense: true,
     staleTime: 30 * (60 * 1000),
     cacheTime: 35 * (60 * 1000),
     enabled: isPageLoaded,
     queryFn: () =>
-      getTweets("byron", ["reply, post"], false, tweetReplyPage, 10),
+      getTweets(profile, ["reply, post"], false, tweetReplyPage, 10),
   });
-  const { data: tweetMediaData, refetch: tweetMediaRefetch } = useQuery({
+  const {
+    data: tweetMediaData,
+    refetch: tweetMediaRefetch,
+    isLoading: isMediaTweetLoading,
+  } = useQuery({
     queryKey: ["getMediaTweets"],
     suspense: true,
     staleTime: 30 * (60 * 1000),
     cacheTime: 35 * (60 * 1000),
     enabled: isPageLoaded,
-    queryFn: () => getTweets("byron", ["post"], true, tweetMediaPage, 10),
+    queryFn: () => getTweets(profile, ["post"], true, tweetMediaPage, 10),
   });
 
   const combineAndSortByDate = (list1: Tweet[], list2: Tweet[]) => {
@@ -101,18 +132,44 @@ const TwitterContent = () => {
     setTweetMediaData((l) => [...l, ...(tweetMediaData || [])]);
   }, [tweetMediaData]);
 
-  useEffect(() => {
-    setIsPageLoaded(true);
-  }, []);
-
   return (
     <>
-      <Profile
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        isPageLoaded={isPageLoaded}
-      />
-      <Tweets data={returnData()} setPage={returnPageType()} />
+      {isProfileLoading ||
+      isTweetLoading ||
+      isReplyTweetLoading ||
+      isMediaTweetLoading ? (
+        <div className="content">
+          <Oval
+            ariaLabel="loading-indicator"
+            height={100}
+            width={100}
+            strokeWidth={5}
+            strokeWidthSecondary={1}
+            color="blue"
+            secondaryColor="white"
+            wrapperClass="loader"
+          />
+        </div>
+      ) : (
+        <>
+          <a className="homeButton" href="/">
+            <Image
+              width="40"
+              height="40"
+              alt="home image"
+              src={home}
+              loading="lazy"
+            />
+            <h5>Home</h5>
+          </a>
+          <Profile
+            data={profileData as ProfileObj}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+          />
+          <Tweets data={returnData()} setPage={returnPageType()} />
+        </>
+      )}
     </>
   );
 };

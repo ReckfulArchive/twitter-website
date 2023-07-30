@@ -75,3 +75,29 @@
 .username {
   margin-top: 10px;
 }
+
+.loader {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  margin-top: -50px;
+  margin-left: -50px;
+}
+
+.homeButton {
+  position: fixed;
+  display: flex;
+  justify-items: center;
+  align-items: center;
+  left: 10%;
+  z-index: 10;
+  @media screen and (max-width: 768px) {
+    bottom: 1%;
+    left: 1%;
+  }
+}
+
+.homeButton > h5 {
+  margin: 0 8px;
+  font-size: larger;
+}

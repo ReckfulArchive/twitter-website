@@ -1,6 +1,4 @@
 import "./globals.css";
-import "../styles/main.css";
-import "../styles/tweaks.css";
 import type { Metadata } from "next";
 import { Open_Sans } from "next/font/google";
 import Providers from "./providers";

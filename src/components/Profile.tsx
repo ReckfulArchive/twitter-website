@@ -1,38 +1,28 @@
 "use client";
 
-import { Dispatch, MouseEvent, SetStateAction } from "react";
+import { Dispatch, SetStateAction } from "react";
 import Image from "next/image";
 import verify from "/public/verify.svg";
 import location from "/public/location.svg";
 import link from "/public/link.svg";
 import birthday from "/public/birthday.svg";
 import calendar from "/public/calendar.svg";
-import { useQuery } from "@tanstack/react-query";
-import { getProfile } from "@/api/queries";
 import { tabs } from "@/global/data";
-import { TweetTabObj } from "@/global/interfaces";
+import { Profile, TweetTabObj } from "@/global/interfaces";
 
 interface ProfileProps {
+  data: Profile;
   activeTab: TweetTabObj;
   setActiveTab: Dispatch<SetStateAction<TweetTabObj>>;
-  isPageLoaded: boolean;
 }
 
-const Profile: React.FC<ProfileProps> = ({ activeTab, setActiveTab, isPageLoaded }) => {
-  const { isLoading, data } = useQuery({
-    queryKey: ["getProfile"],
-    suspense: true,
-    staleTime: 30 * (60 * 1000),
-    cacheTime: 35 * (60 * 1000),
-    enabled: isPageLoaded,
-    queryFn: () => getProfile("byron"),
-  });
+const Profile: React.FC<ProfileProps> = ({ data, activeTab, setActiveTab }) => {
   const toggleTab = (i: number) => {
     setActiveTab(tabs[i]);
   };
   return (
     <>
-      {!isLoading && data && (
+      {data && (
         <div className="profile-top-container">
           <div className="header-photo">
             <Image

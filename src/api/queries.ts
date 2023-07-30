@@ -12,6 +12,15 @@ export const getProfile = async (profile: string) => {
   ).then((res) => res.json())) as Profile;
 };
 
+export const getAllProfiles = async () => {
+  return (await fetch(`https://twitter-api.reckful-archive.org/profile/all`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then((res) => res.json())) as Profile[];
+};
+
 export const getTweets = async (
   profile: string,
   types: string[],
