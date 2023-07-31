@@ -84,6 +84,18 @@
   margin-left: -50px;
 }
 
+.tweeter-info {
+    @media screen and (max-width: 768px) {
+      //font-size: smaller;
+  }
+}
+
+.tweeter-info > img {
+  height: 15px;
+  width: auto;
+  margin-right: 4px;
+}
+
 .homeButton {
   position: fixed;
   display: flex;

@@ -26,6 +26,21 @@ const Tweet: React.FC<TweetProps> = ({ data }) => {
           <span className="hashtag">@{data.profileInfo.handle}</span>
           <span className="separator">•</span>
           <span className="date-sent">{data.dateSent.dateFormatted}</span>
+          {data.location && (
+            <>
+              <span className="separator">•</span>
+              <Image
+                width="0"
+                height="0"
+                sizes="100vw"
+                alt="country flag"
+                src={`https://catamphetamine.gitlab.io/country-flag-icons/3x2/${data.location.countryCode}.svg`}
+              />
+              <span className="date-sent">
+                {data.location.place}, {data.location.countryCode}
+              </span>
+            </>
+          )}
         </div>
         {data.replyToHandles && (
           <div className="replying-to">
@@ -85,13 +100,7 @@ const Tweet: React.FC<TweetProps> = ({ data }) => {
             </span>
           </div>
           <div className="reaction">
-            <Image
-              width="0"
-              height="0"
-              sizes="100vw"
-              alt="Likes"
-              src={like}
-            />
+            <Image width="0" height="0" sizes="100vw" alt="Likes" src={like} />
             <span className="react-amount">
               {data.reactions.likes.formatted}
             </span>
