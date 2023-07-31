@@ -18,7 +18,6 @@ const Tweet: React.FC<TweetProps> = ({ data }) => {
           sizes="100vw"
           alt="Profile picture"
           src={data.profileInfo.picUrl}
-          loading="lazy"
         />
       </div>
       <div className="tweet-content">
@@ -60,7 +59,6 @@ const Tweet: React.FC<TweetProps> = ({ data }) => {
                 sizes="100vw"
                 alt="Picture in the Tweet"
                 src={m.url}
-                loading="lazy"
               />
             )}
             {m.type === "video" && (
@@ -81,7 +79,6 @@ const Tweet: React.FC<TweetProps> = ({ data }) => {
               sizes="100vw"
               alt="Retweets"
               src={retweet}
-              loading="lazy"
             />
             <span className="react-amount">
               {data.reactions.retweets.formatted}
@@ -94,7 +91,6 @@ const Tweet: React.FC<TweetProps> = ({ data }) => {
               sizes="100vw"
               alt="Likes"
               src={like}
-              loading="lazy"
             />
             <span className="react-amount">
               {data.reactions.likes.formatted}

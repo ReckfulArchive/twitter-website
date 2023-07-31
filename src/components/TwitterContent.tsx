@@ -143,7 +143,6 @@ const TwitterContent: React.FC<TwitterContentProps> = ({
               height="40"
               alt="home image"
               src={home}
-              loading="lazy"
             />
             <h5>Home</h5>
           </a>
