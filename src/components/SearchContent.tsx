@@ -20,7 +20,7 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchTweetList, setSearchTweetList] = useState<Tweet[]>([]);
 
-  const { data, refetch } = useQuery({
+  const { data, isLoading, refetch } = useQuery({
     suspense: true,
     queryKey: ["getSearchedTweets"],
     staleTime: 30 * (60 * 1000),
@@ -72,7 +72,7 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
       {searchTweetList.length ? (
         <Tweets key="search" data={searchTweetList} setPage={setTweetPage} />
       ) : (
-        <p className="errorLabel">No Results Returned</p>
+        !isLoading && <p className="errorLabel">No Results Returned</p>
       )}
     </div>
   );
