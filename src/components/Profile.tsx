@@ -61,7 +61,8 @@ const Profile: React.FC<ProfileProps> = ({ data, activeTab, setActiveTab }) => {
                 {data.description.tokenized.map((t, i) =>
                   t.type === "link" ? (
                     <a key={i} href={t.url} target="_blank">
-                      {t.text}{" "}
+                      {i && " "}
+                      {t.text}
                     </a>
                   ) : (
                     t.text
