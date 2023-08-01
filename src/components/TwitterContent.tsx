@@ -8,8 +8,7 @@ import { getProfile, getTweets } from "@/api/queries";
 import { Profile as ProfileObj, Tweet, TweetTabObj } from "@/global/interfaces";
 import { tabs } from "@/global/data";
 import { TweetTab } from "@/global/enums";
-import Image from "next/image";
-import home from "/public/reply.svg";
+import PageHead from "./PageHead";
 
 interface TwitterContentProps {
   isPageLoaded: boolean;
@@ -137,16 +136,9 @@ const TwitterContent: React.FC<TwitterContentProps> = ({
         !isTweetLoading &&
         !isReplyTweetLoading &&
         !isMediaTweetLoading && (
-          <a className="homeButton" href="/">
-            <Image
-              width="40"
-              height="40"
-              alt="home image"
-              src={home}
-            />
-            <h5>Home</h5>
-          </a>
+          <PageHead profile={profile} name={profileData?.name || ""} />
         )}
+
       <Profile
         data={profileData as ProfileObj}
         activeTab={activeTab}

@@ -76,14 +76,6 @@
   margin-top: 10px;
 }
 
-.loader {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  margin-top: -50px;
-  margin-left: -50px;
-}
-
 .tweeter-info {
     @media screen and (max-width: 768px) {
       //font-size: smaller;
@@ -96,22 +88,6 @@
   margin-right: 4px;
 }
 
-.homeButton {
-  position: fixed;
-  display: flex;
-  justify-items: center;
-  align-items: center;
-  top: 0;
-  left: 10%;
-  z-index: 10;
-  @media screen and (max-width: 768px) {
-    top: auto;
-    bottom: 1%;
-    left: 1%;
-  }
-}
-
-.homeButton > h5 {
-  margin: 0 8px;
-  font-size: larger;
+.profile-top-container {
+  margin-top: 5vh;
 }

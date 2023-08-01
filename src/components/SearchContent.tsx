@@ -12,6 +12,7 @@ import DatePicker from "react-datepicker";
 
 import "react-datepicker/dist/react-datepicker.css";
 import { SearchParams } from "@/global/interfaces";
+import { Oval } from "react-loader-spinner";
 
 interface TwitterContentProps {
   profile: string;
@@ -19,6 +20,7 @@ interface TwitterContentProps {
 
 const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
   const separatorRef = useRef<HTMLDivElement>(null);
+  const seachTermInputRef = useRef<HTMLInputElement>(null);
   const [isFirstLoad, setFirstLoad] = useState(true);
   const [tweetPage, setTweetPage] = useState<number>(0);
   const [searchInput, setSearchInput] = useState("");
@@ -27,7 +29,7 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
   const [searchParams, setSearchParams] = useState<SearchParams>({});
   const [searchTweetList, setSearchTweetList] = useState<Tweet[]>([]);
 
-  const { data, isLoading, refetch } = useQuery({
+  const { data, isLoading, isRefetching, refetch } = useQuery({
     suspense: true,
     queryKey: ["getSearchedTweets"],
     staleTime: 30 * (60 * 1000),
@@ -49,6 +51,7 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
         startDate &&
         endDate)
     ) {
+      console.log("fired", searchInput);
       setTweetPage(0);
       setSearchParams({ isfresh: true, term: searchInput, startDate, endDate });
     }
@@ -57,6 +60,8 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
   const handleEnter = (e: KeyboardEvent) => {
     // Enter key code
     if (e.keyCode === 13) search();
+    // Escape key code
+    else if (e.keyCode === 27) seachTermInputRef.current?.select();
   };
 
   useEffect(() => {
@@ -86,17 +91,17 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
 
   return (
     <div>
-      <a className="homeButton" href={`/${profile}`}>
-        <Image width="40" height="40" alt="home image" src={home} />
-        <h5>Back</h5>
-      </a>
       <div className="searchForm">
+        <a className="homeButton" href={`/${profile}`}>
+          <Image width="40" height="40" alt="home image" src={home} />
+        </a>
         <div>
           <input
             className="searchTermInput"
             onChange={(e) => setSearchInput(e.target.value)}
             onKeyUp={handleEnter}
             value={searchInput}
+            ref={seachTermInputRef}
           />
           <button className="searchButton" onClick={() => search()}>
             Search
@@ -130,7 +135,20 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
       </div>
       <div className="searchSeparator" ref={separatorRef} />
       {(data && data.length) || searchTweetList.length ? (
-        <Tweets key="search" data={searchTweetList} setPage={setTweetPage} />
+        isRefetching && tweetPage == 0 ? (
+          <Oval
+            ariaLabel="loading-indicator"
+            height={100}
+            width={100}
+            strokeWidth={3}
+            strokeWidthSecondary={2}
+            color="white"
+            secondaryColor="gray"
+            wrapperClass="loader"
+          />
+        ) : (
+          <Tweets key="search" data={searchTweetList} setPage={setTweetPage} />
+        )
       ) : (
         !isLoading && <p className="errorLabel">No Results Returned</p>
       )}

@@ -72,6 +72,13 @@
   }
 }
 
+.homeButton {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 150;
+}
+
 .errorLabel {
   margin-top: 2rem;
   text-align: center;
