@@ -5,7 +5,7 @@ export interface Tweet {
   id: string;
   twitterUrl: string;
   profileInfo: ProfileInfo;
-  dateSent: Date;
+  dateSent: DateObj;
   location?: Location;
   replyToHandles?: string[];
   text: Text;
@@ -20,8 +20,8 @@ export interface Profile {
   description: Text;
   location: string;
   link: string;
-  birthdayDate: Date;
-  joinDate: Date;
+  birthdayDate: DateObj;
+  joinDate: DateObj;
   following: ReactionFormat;
   followers: ReactionFormat;
   profilePicUrl: string;
@@ -33,13 +33,19 @@ export interface TweetTabObj {
   text: string;
 }
 
+export interface SearchParams {
+  term?: string,
+  startDate?: Date,
+  endDate?: Date,
+}
+
 interface ProfileInfo {
   picUrl: string;
   name: string;
   handle: string;
 }
 
-interface Date {
+interface DateObj {
   iso: string;
   dayOfMonthFormatted: string;
   monthOfYearFormatted: string;

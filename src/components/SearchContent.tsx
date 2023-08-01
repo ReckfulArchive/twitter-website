@@ -8,6 +8,10 @@ import { getSearchedTweets } from "@/api/queries";
 import Image from "next/image";
 import home from "/public/reply.svg";
 import Tweet from "./Tweet";
+import DatePicker from "react-datepicker";
+
+import "react-datepicker/dist/react-datepicker.css";
+import { SearchParams } from "@/global/interfaces";
 
 interface TwitterContentProps {
   profile: string;
@@ -17,7 +21,9 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
   const [isFirstLoad, setFirstLoad] = useState(true);
   const [tweetPage, setTweetPage] = useState<number>(0);
   const [searchInput, setSearchInput] = useState("");
-  const [searchTerm, setSearchTerm] = useState("");
+  const [startDate, setStartDate] = useState<Date>(new Date("2010-01-02"));
+  const [endDate, setEndDate] = useState<Date>(new Date());
+  const [searchParams, setSearchParams] = useState<SearchParams>({});
   const [searchTweetList, setSearchTweetList] = useState<Tweet[]>([]);
 
   const { data, isLoading, refetch } = useQuery({
@@ -26,15 +32,22 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
     staleTime: 30 * (60 * 1000),
     cacheTime: 35 * (60 * 1000),
     enabled: false,
-    queryFn: () => getSearchedTweets(profile, searchTerm, tweetPage, 10),
+    queryFn: () => getSearchedTweets(profile, searchParams, tweetPage, 10),
   });
 
   const search = () => {
     // Make sure you don't clear the list of combined page tweets if the search term hasn't changed!
-    if (searchInput != searchTerm) {
+    // This check makes sure it only resets when you are changing the search term or changing a date when start and end exists
+    if (
+      searchInput != searchParams.term ||
+      ((startDate != searchParams.startDate ||
+        endDate != searchParams.endDate) &&
+        startDate &&
+        endDate)
+    ) {
       setSearchTweetList([]);
       setTweetPage(0);
-      setSearchTerm(searchInput);
+      setSearchParams({ term: searchInput, startDate, endDate });
     }
   };
 
@@ -47,9 +60,11 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
 
   useEffect(() => {
     if (isFirstLoad) setFirstLoad(false);
-    else refetch();
+    else {
+      refetch();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tweetPage, searchTerm]);
+  }, [tweetPage, searchParams]);
 
   useEffect(() => {
     setSearchTweetList((l) => [...l, ...(data || [])]);
@@ -62,13 +77,44 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
         <h5>Back</h5>
       </a>
       <div className="searchForm">
-        <input
-          onChange={(e) => setSearchInput(e.target.value)}
-          onKeyUp={handleEnter}
-          value={searchInput}
-        />
-        <button onClick={() => search()}>Search</button>
+        <div>
+          <input
+            className="searchTermInput"
+            onChange={(e) => setSearchInput(e.target.value)}
+            onKeyUp={handleEnter}
+            value={searchInput}
+          />
+          <button className="searchButton" onClick={() => search()}>
+            Search
+          </button>
+        </div>
+        <div>
+          <div>
+            <h5 className="searchDateLabel">From</h5>
+            <DatePicker
+              className="searchDatePicker"
+              selected={startDate}
+              onChange={(date) => setStartDate(date as Date)}
+              selectsStart
+              startDate={startDate}
+              endDate={endDate}
+            />
+          </div>
+          <div>
+            <h5 className="searchDateLabel">To</h5>
+            <DatePicker
+              className="searchDatePicker"
+              selected={endDate}
+              onChange={(date) => setEndDate(date as Date)}
+              selectsEnd
+              startDate={startDate}
+              endDate={endDate}
+              minDate={startDate}
+            />
+          </div>
+        </div>
       </div>
+      <div className="searchSeparator"/>
       {searchTweetList.length ? (
         <Tweets key="search" data={searchTweetList} setPage={setTweetPage} />
       ) : (

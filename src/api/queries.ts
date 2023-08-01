@@ -1,4 +1,4 @@
-import { Profile, Tweet } from "@/global/interfaces";
+import { Profile, SearchParams, Tweet } from "@/global/interfaces";
 
 export const getProfile = async (profile: string) => {
   return (await fetch(
@@ -41,12 +41,21 @@ export const getTweets = async (
 
 export const getSearchedTweets = async (
   profile: string,
-  searchTerm: string,
+  params: SearchParams,
   page: number,
   size: number
 ) => {
+  let searchString = "";
+  if (params.term) {
+    searchString += `&contains_text=${params.term}`;
+  }
+  if (params.startDate && params.endDate) {
+    searchString += `&from_date=${
+      params.startDate.toISOString().split("T")[0]
+    }&to_date=${params.endDate.toISOString().split("T")[0]}`;
+  }
   return (await fetch(
-    `https://twitter-api.reckful-archive.org/tweets/${profile}?contains_text=${searchTerm}&page=${page}&size=${size}`,
+    `https://twitter-api.reckful-archive.org/tweets/${profile}?page=${page}&size=${size}${searchString}`,
     {
       method: "GET",
       headers: {
@@ -55,4 +64,3 @@ export const getSearchedTweets = async (
     }
   ).then((res) => res.json())) as Tweet[];
 };
-
