@@ -34,9 +34,10 @@ export interface TweetTabObj {
 }
 
 export interface SearchParams {
-  term?: string,
-  startDate?: Date,
-  endDate?: Date,
+  isfresh?: boolean;
+  term?: string;
+  startDate?: Date;
+  endDate?: Date;
 }
 
 interface ProfileInfo {

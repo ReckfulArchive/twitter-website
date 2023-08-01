@@ -1,6 +1,6 @@
 "use client";
 
-import { KeyboardEvent, useEffect, useState } from "react";
+import { KeyboardEvent, useEffect, useRef, useState } from "react";
 import Tweets from "./Tweets";
 import "../styles/search.css";
 import { useQuery } from "@tanstack/react-query";
@@ -18,6 +18,7 @@ interface TwitterContentProps {
 }
 
 const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
+  const separatorRef = useRef<HTMLDivElement>(null);
   const [isFirstLoad, setFirstLoad] = useState(true);
   const [tweetPage, setTweetPage] = useState<number>(0);
   const [searchInput, setSearchInput] = useState("");
@@ -35,6 +36,9 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
     queryFn: () => getSearchedTweets(profile, searchParams, tweetPage, 10),
   });
 
+  // Flow is as follows;
+  // if any search field changes, trigger a refresh of Search params
+  // Search Params changing triggers a r
   const search = () => {
     // Make sure you don't clear the list of combined page tweets if the search term hasn't changed!
     // This check makes sure it only resets when you are changing the search term or changing a date when start and end exists
@@ -45,29 +49,39 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
         startDate &&
         endDate)
     ) {
-      setSearchTweetList([]);
       setTweetPage(0);
-      setSearchParams({ term: searchInput, startDate, endDate });
+      setSearchParams({ isfresh: true, term: searchInput, startDate, endDate });
     }
   };
 
   const handleEnter = (e: KeyboardEvent) => {
     // Enter key code
-    if (e.keyCode === 13) {
-      search();
-    }
+    if (e.keyCode === 13) search();
   };
 
   useEffect(() => {
     if (isFirstLoad) setFirstLoad(false);
-    else {
-      refetch();
-    }
+    else refetch();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tweetPage, searchParams]);
+  }, [
+    tweetPage,
+    searchParams.term,
+    searchParams.startDate,
+    searchParams.endDate,
+  ]);
 
   useEffect(() => {
+    if (searchParams.isfresh) {
+      setSearchTweetList([]);
+      setSearchParams((p) => ({ ...p, isfresh: false }));
+      separatorRef.current?.scrollIntoView({
+        behavior: "smooth",
+        block: "end",
+        inline: "nearest",
+      });
+    }
     setSearchTweetList((l) => [...l, ...(data || [])]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   return (
@@ -114,8 +128,8 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
           </div>
         </div>
       </div>
-      <div className="searchSeparator"/>
-      {searchTweetList.length ? (
+      <div className="searchSeparator" ref={separatorRef} />
+      {(data && data.length) || searchTweetList.length ? (
         <Tweets key="search" data={searchTweetList} setPage={setTweetPage} />
       ) : (
         !isLoading && <p className="errorLabel">No Results Returned</p>
