@@ -83,11 +83,23 @@
 }
 
 .tweeter-info > img {
-  height: 15px;
+  height: 13px;
   width: auto;
+  margin-top: auto;
+  margin-bottom: auto;
   margin-right: 4px;
+  @media screen and (max-width: 768px) {
+    height: 10px;
+  }
 }
 
 .profile-top-container {
   margin-top: 5vh;
+}
+
+.date-sent, .location-sent {
+  color: #808080;
+  @media screen and (max-width: 768px) {
+    font-size: x-small;
+  }
 }

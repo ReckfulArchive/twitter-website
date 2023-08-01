@@ -51,7 +51,6 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
         startDate &&
         endDate)
     ) {
-      console.log("fired", searchInput);
       setTweetPage(0);
       setSearchParams({ isfresh: true, term: searchInput, startDate, endDate });
     }

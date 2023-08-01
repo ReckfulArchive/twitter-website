@@ -28,7 +28,7 @@ const Tweet: React.FC<TweetProps> = ({ data }) => {
           <span className="date-sent">{data.dateSent.dateFormatted}</span>
           {data.location && (
             <>
-              <span className="separator">•</span>
+              {/* <span className="separator">•</span> */}
               <Image
                 width="0"
                 height="0"
@@ -36,8 +36,8 @@ const Tweet: React.FC<TweetProps> = ({ data }) => {
                 alt="country flag"
                 src={`https://catamphetamine.gitlab.io/country-flag-icons/3x2/${data.location.countryCode}.svg`}
               />
-              <span className="date-sent">
-                {data.location.place}, {data.location.countryCode}
+              <span className="location-sent">
+                {data.location.place}
               </span>
             </>
           )}
