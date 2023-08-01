@@ -26,6 +26,7 @@ const Profile: React.FC<ProfileProps> = ({ data, activeTab, setActiveTab }) => {
         <div className="profile-top-container">
           <div className="header-photo">
             <Image
+              priority
               width="0"
               height="0"
               sizes="100vw"
