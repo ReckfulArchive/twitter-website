@@ -101,6 +101,7 @@ const SearchContent: React.FC<TwitterContentProps> = ({ profile }) => {
             onKeyUp={handleEnter}
             value={searchInput}
             ref={seachTermInputRef}
+            placeholder="Search Archive"
           />
           <button className="searchButton" onClick={() => search()}>
             Search
